@@ -1,73 +1,86 @@
-# Welcome to your Lovable project
+# [Nama Proyek Anda] 🚀
 
-## Project info
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Kotlin](https://img.shields.io/badge/Kotlin-1.9.x-blue.svg?logo=kotlin)](https://kotlinlang.org)
+[![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.x.x-green.svg?logo=spring)](https://spring.io/projects/spring-boot)
+[![React.js](https://img.shields.io/badge/React.js-18.x-61DAFB.svg?logo=react)](https://reactjs.org/)
 
-**URL**: https://lovable.dev/projects/bee7afaf-6db2-4a0d-8dbe-81e545c2bd4d
+Sebuah aplikasi chat real-time yang dibangun sebagai tantangan full-stack, menampilkan komunikasi latensi rendah menggunakan WebSocket dengan backend Kotlin dan frontend React.js yang modern.
 
-## How can I edit this code?
+![[Link Screenshot atau GIF Aplikasi Anda]](https://via.placeholder.com/800x400.png?text=Screenshot+Aplikasi+Anda)
 
-There are several ways of editing your application.
+## 📝 Tentang Proyek
 
-**Use Lovable**
+Proyek ini lahir dari keinginan untuk mendalami dan menaklukkan tantangan dalam membangun aplikasi web modern yang sangat interaktif. Fokus utamanya adalah menciptakan platform chat di mana pengguna dapat berkomunikasi secara instan.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/bee7afaf-6db2-4a0d-8dbe-81e545c2bd4d) and start prompting.
+Backend dibangun di atas fondasi kokoh **Kotlin & Spring Boot**, memanfaatkan Spring WebSocket dengan protokol STOMP untuk mengelola pesan secara efisien. Arsitekturnya dirancang agar siap untuk diskalakan menggunakan message broker eksternal seperti RabbitMQ.
 
-Changes made via Lovable will be committed automatically to this repo.
+Frontend adalah Single Page Application (SPA) yang responsif dan modern, dibangun menggunakan **React.js** dan **Vite**, memberikan pengalaman pengguna yang cepat dan mulus dengan manajemen state yang kuat.
 
-**Use your preferred IDE**
+## ✨ Fitur Utama
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+-   **Pesan Real-Time:** Mengirim dan menerima pesan secara instan tanpa perlu me-refresh halaman.
+-   **Grup Chat Dinamis:** Arsitektur backend mendukung pembuatan ruang chat berdasarkan topik, memungkinkan segmentasi pengguna.
+-   **UI Modern & Reaktif:** Tampilan yang bersih dan intuitif dibangun dengan React dan ditata dengan Tailwind CSS.
+-   **Arsitektur Skalabel:** Siap diintegrasikan dengan message broker (seperti RabbitMQ) untuk menangani banyak koneksi simultan di beberapa instance server.
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## 🛠️ Tumpukan Teknologi (Tech Stack)
 
-Follow these steps:
+### Backend
+* **Bahasa:** Kotlin
+* **Framework:** Spring Boot
+* **Real-time:** Spring WebSocket, STOMP Protocol
+* **Database:** PostgreSQL (disarankan untuk produksi) / H2 (untuk development)
+* **Arsitektur Skalabilitas:** Siap untuk RabbitMQ / Apache Kafka
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+### Frontend
+* **Library:** React.js (Hooks, Context API)
+* **Build Tool:** Vite
+* **Styling:** Tailwind CSS
+* **WebSocket Client:** `@stomp/stompjs` & `sockjs-client`
+* **State Management:** Zustand / Redux Toolkit (disarankan)
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+## 🚀 Memulai (Getting Started)
 
-# Step 3: Install the necessary dependencies.
-npm i
+Untuk menjalankan proyek ini secara lokal, ikuti langkah-langkah berikut.
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+### Prasyarat
 
-**Edit a file directly in GitHub**
+Pastikan Anda telah menginstal perangkat lunak berikut:
+* JDK 17 atau lebih tinggi
+* Maven atau Gradle
+* Node.js v18 atau lebih tinggi & npm/yarn
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Instalasi & Menjalankan
 
-**Use GitHub Codespaces**
+1.  **Clone repository ini:**
+    ```bash
+    git clone [https://github.com/](https://github.com/)[username-anda]/[nama-repo-anda].git
+    cd [nama-repo-anda]
+    ```
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+2.  **Jalankan Backend Server (di terminal pertama):**
+    ```bash
+    cd backend # atau nama folder backend Anda
+    ./mvnw spring-boot:run
+    ```
+    Server backend sekarang berjalan di `http://localhost:8080`.
 
-## What technologies are used for this project?
+3.  **Jalankan Frontend App (di terminal kedua):**
+    ```bash
+    cd frontend # atau nama folder frontend Anda
+    npm install
+    npm run dev
+    ```
+    Aplikasi frontend sekarang dapat diakses di `http://localhost:5173` (atau port lain yang ditampilkan oleh Vite).
 
-This project is built with:
+4.  Buka aplikasi di beberapa tab browser untuk mensimulasikan banyak pengguna!
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## 👥 Kontributor
 
-## How can I deploy this project?
+-   **Backend:** [Nama Anda] - [Link Profil GitHub Anda]
+-   **Frontend:** [Nama Teman Anda] - [Link Profil GitHub Teman Anda]
 
-Simply open [Lovable](https://lovable.dev/projects/bee7afaf-6db2-4a0d-8dbe-81e545c2bd4d) and click on Share -> Publish.
+## 📄 Lisensi
 
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Proyek ini dilisensikan di bawah Lisensi MIT - lihat file [LICENSE](LICENSE) untuk detailnya.
