@@ -7,8 +7,6 @@
 
 Sebuah aplikasi chat real-time yang dibangun sebagai tantangan full-stack, menampilkan komunikasi latensi rendah menggunakan WebSocket dengan backend Kotlin dan frontend React.js yang modern.
 
-![[Link Screenshot atau GIF Aplikasi Anda]](https://via.placeholder.com/800x400.png?text=Screenshot+Aplikasi+Anda)
-
 ## 📝 Tentang Proyek
 
 Proyek ini lahir dari keinginan untuk mendalami dan menaklukkan tantangan dalam membangun aplikasi web modern yang sangat interaktif. Fokus utamanya adalah menciptakan platform chat di mana pengguna dapat berkomunikasi secara instan.
@@ -78,9 +76,6 @@ Pastikan Anda telah menginstal perangkat lunak berikut:
 
 ## 👥 Kontributor
 
--   **Backend:** [Nama Anda] - [Link Profil GitHub Anda]
--   **Frontend:** [Nama Teman Anda] - [Link Profil GitHub Teman Anda]
+-   **Backend:** Farhan Adi Saputra
+-   **Frontend:** Akbara Jati Gayuh
 
-## 📄 Lisensi
-
-Proyek ini dilisensikan di bawah Lisensi MIT - lihat file [LICENSE](LICENSE) untuk detailnya.
