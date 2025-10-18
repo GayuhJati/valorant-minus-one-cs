@@ -1,18 +1,14 @@
 import NavigationSidebar from "@/components/NavigationSidebar";
 import ChatList from "@/components/ChatList";
 import ChatRoom from "@/components/ChatRoom";
-import { NavBar } from "@/components/NavBar";
-import MainLayout from "@/components/MainLayout";
 
 const Index = () => {
   return (
-    <>
-      <MainLayout>
-        <div>
-          home
-        </div>
-      </MainLayout>
-    </>
+    <div className="flex h-screen w-full overflow-hidden">
+      <NavigationSidebar />
+      <ChatList />
+      <ChatRoom />
+    </div>
   );
 };
 
