@@ -1,18 +1,21 @@
-import NavigationSidebar from "@/components/NavigationSidebar";
-import ChatList from "@/components/ChatList";
-import ChatRoom from "@/components/ChatRoom";
-import { NavBar } from "@/components/NavBar";
-import MainLayout from "@/components/MainLayout";
+import Navbar from "@/components/Navbar";
+import Hero from "@/components/Hero";
+import HowItWorks from "@/components/HowItWorks";
+import Features from "@/components/Features";
+import CallToAction from "@/components/CallToAction";
+import Footer from "@/components/Footer";
+import Layout from "@/components/Layout";
 
 const Index = () => {
   return (
-    <>
-      <MainLayout>
-        <div>
-          home
-        </div>
-      </MainLayout>
-    </>
+    <div className="min-h-screen bg-background">
+      <Layout>
+        <Hero />
+        <HowItWorks />
+        <Features />
+        <CallToAction />
+      </Layout>
+    </div>
   );
 };
 

@@ -1,5 +1,7 @@
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
+import Layout from '@/components/Layout'
+import { Button } from '@/components/ui/button'
 
 const NotFound = () => {
   const location = useLocation();
@@ -9,18 +11,26 @@ const NotFound = () => {
   }, [location.pathname]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#0f1923]">
-      <div className="text-center">
-        <h1 className="mb-4 text-6xl font-extrabold text-[#ff6f6f] tracking-widest">404</h1>
-        <p className="mb-6 text-xl text-white font-semibold">Oops! Page not found</p>
-        <a
-          href="/"
-          className="inline-block px-6 py-3 rounded-lg bg-[#232323] text-[#ff6f6f] font-bold tracking-wide shadow hover:bg-[#292929] transition-colors"
-        >
-          Return to Home
-        </a>
+    <Layout>
+      <div className="relative flex min-h-screen items-center justify-center">
+        <div className="absolute inset-0 opacity-15 pointer-events-none">
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: `linear-gradient(hsl(var(--primary)) 1px, transparent 1px),linear-gradient(90deg, hsl(var(--primary)) 1px, transparent 1px)`,
+              backgroundSize: "100px 100px",
+            }}
+          />
+        </div>
+        <div className="relative z-10 text-center bg-background/80 backdrop-blur-xl shadow-lg rounded-xl p-10 border border-border">
+          <h1 className="mb-4 text-6xl font-extrabold text-primary drop-shadow">404</h1>
+          <p className="mb-6 text-xl text-foreground/80 font-medium">Oops! Page not found</p>
+          <Button asChild variant="hero" size="lg" className="mt-2">
+            <a href="/">Return to Home</a>
+          </Button>
+        </div>
       </div>
-    </div>
+    </Layout>
   );
 };
 

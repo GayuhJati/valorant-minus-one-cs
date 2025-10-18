@@ -71,7 +71,7 @@ export default function ChatRoom() {
   const [showInfo, setShowInfo] = useState(true);
 
   return (
-    <div className="flex flex-col h-screen bg-background">
+    <div className="flex flex-col h-screen bg-background w-full">
       {/* Header */}
       <header className="bg-background border-b px-6 py-4 flex items-center justify-between">
         <div>
@@ -94,7 +94,7 @@ export default function ChatRoom() {
       <div className="flex flex-1 overflow-hidden">
         {/* Messages Area */}
         <ScrollArea className="flex-1 px-6 py-4">
-          <div className="space-y-6 max-w-3xl">
+          <div className="space-y-6 w-full">
             {mockMessages.map((message) => (
               <div
                 key={message.id}
@@ -154,7 +154,7 @@ export default function ChatRoom() {
 
       {/* Input Form */}
       <footer className="bg-background border-t px-6 py-4">
-        <form className="flex gap-3 max-w-4xl">
+        <form className="flex gap-3 w-full">
           <Button variant="ghost" size="icon" type="button">
             <Paperclip className="w-5 h-5" />
           </Button>

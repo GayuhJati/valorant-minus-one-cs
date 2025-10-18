@@ -1,66 +1,103 @@
-'use client'
-import React, { useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { Menu, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
-export const NavBar = () => {
-  const [menuOpen, setMenuOpen] = useState(false)
-  const location = useLocation()
-  const navItems = [
-    { to: '/', label: 'Home' },
-    { to: '/chat-room', label: 'Chat' },
-    { to: '/timeline', label: 'Timeline' },
-  ]
+const Navbar = () => {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const navLinks = [
+    { name: "Home", href: "/" },
+    { name: "Chat", href: "/chat" },
+    { name: "Board", href: "/board" },
+  ];
 
   return (
-    <nav className="bg-[#0f1923] text-white px-[36px] py-6 flex items-center justify-between shadow relative">
-      <div className="flex items-center gap-3">
-        <img src="/asset/logo2.png" alt="Logo" className=" h-8" />
-      </div>
-      {/* Desktop menu */}
-      <div className="hidden md:flex gap-6 relative">
-        {navItems.map((item) => {
-          const isActive = location.pathname === item.to
-          return (
-            <div key={item.to} className="flex flex-col items-center relative">
-              <Link
-                to={item.to}
-                className={`hover:bg-[#292929] transition-colors mx-[7px] rounded-lg flex items-center font-bold tracking-wide ${isActive ? 'text-[#ff6f6f] bg-[#232323]' : ''}`}
-                style={{ letterSpacing: '2px' }}
+    <motion.nav
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        isMobileMenuOpen
+          ? "bg-background/80 backdrop-blur-xl border-b border-border shadow-lg"
+          : isScrolled
+          ? "bg-background/80 backdrop-blur-xl border-b border-border shadow-lg"
+          : "bg-transparent"
+      }`}
+    >
+      <div className="container mx-auto px-4">
+        <div className="flex items-center justify-between h-16 md:h-20">
+          {/* Logo */}
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            className="flex items-center space-x-2"
+          >
+            <img src="/asset/logo2.png" className="h-8" alt="Logo" />
+          </motion.div>
+
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-8">
+            {navLinks.map((link) => (
+              <a
+                key={link.name}
+                href={link.href}
+                className="text-foreground/80 hover:text-primary transition-colors duration-200 font-medium uppercase text-sm tracking-wider"
               >
-                <span className='px-[16px] py-[7px]'>{item.label}</span>
-              </Link>
-              {isActive && (
-                <div className="h-[6px] w-[70%] bg-[#ff6f6f] rounded-full mt-2" />
-              )}
-            </div>
-          )
-        })}
-      </div>
-      {/* Hamburger icon for mobile */}
-      <button
-        className="md:hidden flex flex-col justify-center items-center w-10 h-10 focus:outline-none"
-        onClick={() => setMenuOpen(!menuOpen)}
-        aria-label="Toggle menu"
-      >
-        <span className={`block w-6 h-0.5 bg-white mb-1 transition-all ${menuOpen ? 'rotate-45 translate-y-1.5' : ''}`}></span>
-        <span className={`block w-6 h-0.5 bg-white mb-1 transition-all ${menuOpen ? 'opacity-0' : ''}`}></span>
-        <span className={`block w-6 h-0.5 bg-white transition-all ${menuOpen ? '-rotate-45 -translate-y-1.5' : ''}`}></span>
-      </button>
-      {/* Mobile menu */}
-      {menuOpen && (
-        <div className="absolute left-0 top-full w-full bg-[#292929] rounded-b shadow-md flex flex-col md:hidden z-50">
-          {navItems.map((item) => (
-            <Link
-              key={item.to}
-              to={item.to}
-              className={`px-6 py-4 hover:bg-cyan-700 font-bold ${location.pathname === item.to ? 'border-b-2 border-red-500' : ''}`}
-              onClick={() => setMenuOpen(false)}
-            >
-              {item.label}
-            </Link>
-          ))}
+                {link.name}
+              </a>
+            ))}
+            <a href="/login">
+              <Button variant="hero" size="sm">
+                Login
+              </Button>
+            </a>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            className="md:hidden text-foreground"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
         </div>
-      )}
-    </nav>
-  )
-}
+
+        {/* Mobile Menu */}
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden border-t border-border mt-2 pt-4 pb-6 space-y-4"
+          >
+            {navLinks.map((link) => (
+              <a
+                key={link.name}
+                href={link.href}
+                className="block text-foreground/80 hover:text-primary transition-colors duration-200 font-medium uppercase text-sm tracking-wider"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                {link.name}
+              </a>
+            ))}
+            <a href="/login">
+              <Button variant="hero" size="sm" className="w-full">
+                Login
+              </Button>
+            </a>
+          </motion.div>
+        )}
+      </div>
+    </motion.nav>
+  );
+};
+
+export default Navbar;
