@@ -32,12 +32,7 @@ const Footer = () => {
           {/* Brand */}
           <div className="lg:col-span-2">
             <div className="flex items-center space-x-2 mb-4">
-              <div className="w-8 h-8 bg-primary clip-corner flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-xl">V</span>
-              </div>
-              <span className="text-xl font-bold text-foreground">
-                Valorant <span className="text-primary">-1</span>
-              </span>
+              <img src="/asset/logo2.png" alt="Valorant -1" className="h-8"/>
             </div>
             <p className="text-muted-foreground text-sm max-w-xs leading-relaxed">
               The fastest way to find your last teammate and dominate in Valorant. Join lobbies, chat instantly, and rank up together.
