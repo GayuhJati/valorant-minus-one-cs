@@ -11,7 +11,7 @@ const Validation = () => {
     const token = params.get("token");
     if (!token) {
       setStatus("error");
-      setMessage("Token tidak ditemukan.");
+      setMessage("Token not found.");
       return;
     }
     fetch(`/api/v1/auth/verify-email?token=${token}`)
@@ -19,15 +19,15 @@ const Validation = () => {
       .then((data) => {
         if (data.success) {
           setStatus("success");
-          setMessage(data.message || "Email berhasil diverifikasi!");
+          setMessage(data.message || "Email successfully verified!");
         } else {
           setStatus("error");
-          setMessage(data.message || "Verifikasi gagal.");
+          setMessage(data.message || "Verification failed.");
         }
       })
       .catch(() => {
         setStatus("error");
-        setMessage("Terjadi kesalahan saat verifikasi.");
+        setMessage("An error occurred during verification.");
       });
   }, []);
 
@@ -43,36 +43,32 @@ const Validation = () => {
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
                 </svg>
               </div>
-              <h2 className="text-xl font-bold mb-2">Memverifikasi email...</h2>
-              <p className="text-base text-muted-foreground">Mohon tunggu sebentar.</p>
+              <h2 className="text-xl font-bold mb-2">Verifying email...</h2>
+              <p className="text-base text-muted-foreground">Please wait a moment.</p>
             </>
           )}
           {status === "success" && (
-            <>
-              <div className="flex justify-center mb-4 animate-pop">
-                <svg className="w-16 h-16 text-green-500" fill="none" viewBox="0 0 24 24">
-                  <circle cx="12" cy="12" r="10" fill="currentColor" opacity="0.1" />
-                  <path d="M8 12.5l2.5 2.5L16 9.5" stroke="#22c55e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </div>
-              <h2 className="text-2xl font-extrabold text-green-600 mb-2">Verifikasi Berhasil!</h2>
-              <p className="text-base text-green-700 mb-4">{message}</p>
+            <div className="flex flex-col items-center animate-fade-in">
+              <svg className="w-16 h-16 mb-4 text-green-500 animate-bounce" fill="none" viewBox="0 0 48 48">
+                <circle cx="24" cy="24" r="22" fill="#22c55e" fillOpacity="0.18" />
+                <path d="M16 25l6 6 10-14" stroke="#16a34a" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              <h2 className="text-3xl font-bold text-green-700 mb-2 text-center">Email Verified!</h2>
+              <p className="text-lg text-center text-green-700 mb-4">Your email has been successfully verified. You can now login.</p>
               <a href="/login">
                 <Button variant="hero" className="w-full">Login</Button>
               </a>
-            </>
+            </div>
           )}
           {status === "error" && (
-            <>
-              <div className="flex justify-center mb-4 animate-pop">
-                <svg className="w-16 h-16 text-red-500" fill="none" viewBox="0 0 24 24">
-                  <circle cx="12" cy="12" r="10" fill="currentColor" opacity="0.1" />
-                  <path d="M15 9l-6 6M9 9l6 6" stroke="#ef4444" strokeWidth="2.5" strokeLinecap="round" />
-                </svg>
-              </div>
-              <h2 className="text-2xl font-extrabold text-red-600 mb-2">Verifikasi Gagal</h2>
-              <p className="text-base text-red-700">{message}</p>
-            </>
+            <div className="flex flex-col items-center animate-fade-in">
+              <svg className="w-16 h-16 mb-4 text-red-500 animate-shake" fill="none" viewBox="0 0 48 48">
+                <circle cx="24" cy="24" r="22" fill="#ef4444" fillOpacity="0.18" />
+                <path d="M18 18l12 12M30 18l-12 12" stroke="#ef4444" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              <h2 className="text-3xl font-bold text-red-700 mb-2 text-center">Verification Failed</h2>
+              <p className="text-lg text-center text-red-600 mb-4">The verification link is invalid or has expired.</p>
+            </div>
           )}
         </div>
       </div>

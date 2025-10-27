@@ -28,12 +28,12 @@ const ResetPassword = () => {
     e.preventDefault();
     if (password.length < 8) {
       setStatus("error");
-      setMessage("Password minimal 8 karakter.");
+      setMessage("Password must be at least 8 characters.");
       return;
     }
     if (password !== confirm) {
       setStatus("error");
-      setMessage("Password tidak sama.");
+      setMessage("Passwords do not match.");
       return;
     }
     setStatus("loading");
@@ -51,14 +51,14 @@ const ResetPassword = () => {
       const data = await res.json();
       if (data.success) {
         setStatus("success");
-        setMessage(data.message || "Password berhasil direset. Silakan login dengan password baru.");
+        setMessage(data.message || "Your password has been reset. Please login with your new password.");
       } else {
         setStatus("error");
-        setMessage(data.message || "Gagal reset password.");
+        setMessage(data.message || "Failed to reset password.");
       }
     } catch (err) {
       setStatus("error");
-      setMessage("Terjadi kesalahan. Silakan coba lagi nanti.");
+      setMessage("An error occurred. Please try again later.");
     }
   };
 
@@ -82,7 +82,7 @@ const ResetPassword = () => {
             </svg>
           </div>
           <h2 className="text-3xl font-extrabold mb-2 text-center tracking-tight">Reset Password</h2>
-          <p className="text-center text-muted-foreground mb-7 text-base">Masukkan password baru untuk akun kamu.</p>
+          <p className="text-center text-muted-foreground mb-7 text-base">Enter your new password for your account.</p>
           {status !== "success" && (
             <>
               <div className="mb-5">
@@ -95,7 +95,7 @@ const ResetPassword = () => {
                     onChange={e => setPassword(e.target.value)}
                     required
                     minLength={8}
-                    placeholder="Password baru"
+                    placeholder="New password"
                     className="text-base py-2 pr-20"
                     disabled={status === "loading"}
                   />
@@ -119,7 +119,7 @@ const ResetPassword = () => {
                     onChange={e => setConfirm(e.target.value)}
                     required
                     minLength={8}
-                    placeholder="Ulangi password baru"
+                    placeholder="Repeat new password"
                     className="text-base py-2 pr-20"
                     disabled={status === "loading"}
                   />
@@ -139,7 +139,7 @@ const ResetPassword = () => {
                 className="w-full text-base py-2 font-semibold tracking-wide"
                 disabled={status === "loading"}
               >
-                {status === "loading" ? "Menyimpan..." : "Reset Password"}
+                {status === "loading" ? "Saving..." : "Reset Password"}
               </Button>
             </>
           )}
@@ -150,8 +150,8 @@ const ResetPassword = () => {
                   <circle cx="24" cy="24" r="22" fill="#22c55e" opacity="0.18" />
                   <path d="M16 25l6 6 10-14" stroke="#16a34a" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
-                <div className="text-[22px] font-bold text-center mb-1 text-green-700">Berhasil!</div>
-                <div className="text-base text-center text-white">{message}</div>
+                <div className="text-[22px] font-bold text-center mb-1 text-green-700">Success!</div>
+                <div className="text-base text-center text-green-700">{message}</div>
               </div>
             </div>
           )}
@@ -162,7 +162,7 @@ const ResetPassword = () => {
                   <circle cx="24" cy="24" r="22" fill="#ef4444" opacity="0.18" />
                   <path d="M18 18l12 12M30 18l-12 12" stroke="#ef4444" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
-                <div className="text-[22px] font-bold text-center mb-1 text-red-700">Gagal!</div>
+                <div className="text-[22px] font-bold text-center mb-1 text-red-700">Failed!</div>
                 <div className="text-base text-center text-red-600">{message}</div>
               </div>
             </div>
