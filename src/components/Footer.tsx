@@ -3,19 +3,17 @@ import { Github, Twitter, MessageCircle } from "lucide-react";
 const Footer = () => {
   const footerLinks = {
     Product: [
-      { name: "Features", href: "#features" },
-      { name: "How It Works", href: "#how-it-works" },
-      { name: "Timeline", href: "#timeline" },
+      { name: "Chat", href: "/chat" },
+      { name: "Board", href: "/board" },
     ],
     Legal: [
-      { name: "Terms of Service", href: "#" },
-      { name: "Privacy Policy", href: "#" },
+      { name: "Privacy & Terms of Service", href: "/privacy-terms" },
       { name: "Cookie Policy", href: "#" },
     ],
     Support: [
-      { name: "Help Center", href: "#" },
-      { name: "Contact Us", href: "#" },
-      { name: "FAQ", href: "#" },
+      { name: "Help Center", href: "/support#help-center" },
+      { name: "Contact Us", href: "/support#contact-us" },
+      { name: "FAQ", href: "/support#faq" },
     ],
   };
 

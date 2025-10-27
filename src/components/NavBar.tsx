@@ -3,9 +3,21 @@ import { motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+type User = {
+  id: number;
+  email: string;
+  username: string;
+  role: string;
+  provider: string;
+  emailVerified: boolean;
+  lastLogin: string;
+  createdAt: string;
+};
+
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -13,6 +25,13 @@ const Navbar = () => {
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
   }, []);
 
   const navLinks = [
@@ -54,11 +73,15 @@ const Navbar = () => {
                 {link.name}
               </a>
             ))}
-            <a href="/login">
-              <Button variant="hero" size="sm">
-                Login
-              </Button>
-            </a>
+            {user ? (
+              <span className="text-foreground font-semibold text-sm">{user.username}</span>
+            ) : (
+              <a href="/login">
+                <Button variant="hero" size="sm">
+                  Login
+                </Button>
+              </a>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -88,11 +111,15 @@ const Navbar = () => {
                 {link.name}
               </a>
             ))}
-            <a href="/login">
-              <Button variant="hero" size="sm" className="w-full">
-                Login
-              </Button>
-            </a>
+            {user ? (
+              <span className="block text-foreground font-semibold text-sm w-full text-center">{user.username}</span>
+            ) : (
+              <a href="/login">
+                <Button variant="hero" size="sm" className="w-full">
+                  Login
+                </Button>
+              </a>
+            )}
           </motion.div>
         )}
       </div>

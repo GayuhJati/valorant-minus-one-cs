@@ -68,22 +68,30 @@ const mockMessages: Message[] = [
 ];
 
 export default function ChatRoom() {
-  const [showInfo, setShowInfo] = useState(true);
+  const [showInfo, setShowInfo] = useState(false);
+  const [showSearch, setShowSearch] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
+
+  // Filter messages based on searchValue
+  const filteredMessages = searchValue.trim()
+    ? mockMessages.filter(
+        m =>
+          (m.text && m.text.toLowerCase().includes(searchValue.toLowerCase())) ||
+          m.sender.toLowerCase().includes(searchValue.toLowerCase())
+      )
+    : mockMessages;
 
   return (
     <div className="flex flex-col h-screen bg-background w-full">
       {/* Header */}
       <header className="bg-background border-b px-6 py-4 flex items-center justify-between">
-        <div>
+        <div className="flex-1 min-w-0">
           <h1 className="text-foreground text-xl font-semibold">Design chat</h1>
           <p className="text-sm text-muted-foreground">23 members, 10 online</p>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon">
+          <Button variant="ghost" size="icon" onClick={() => setShowSearch(s => !s)}>
             <Search className="w-5 h-5" />
-          </Button>
-          <Button variant="ghost" size="icon">
-            <Phone className="w-5 h-5" />
           </Button>
           <Button variant="ghost" size="icon" onClick={() => setShowInfo(!showInfo)}>
             <MoreVertical className="w-5 h-5" />
@@ -91,60 +99,79 @@ export default function ChatRoom() {
         </div>
       </header>
 
+      {/* Search Bar Floating Below Header */}
+      {showSearch && (
+        <div className="fixed left-0 right-0 z-30 flex justify-end pointer-events-none" style={{ top: '80px' }}>
+          <div className="pointer-events-auto mr-8 mt-2 bg-background border shadow-lg rounded-xl p-2 w-full max-w-xs">
+            <Input
+              autoFocus
+              value={searchValue}
+              onChange={e => setSearchValue(e.target.value)}
+              placeholder="Search messages..."
+              className="w-full"
+            />
+          </div>
+        </div>
+      )}
+
       <div className="flex flex-1 overflow-hidden">
         {/* Messages Area */}
         <ScrollArea className="flex-1 px-6 py-4">
           <div className="space-y-6 w-full">
-            {mockMessages.map((message) => (
-              <div
-                key={message.id}
-                className={`flex gap-3 ${message.isMine ? "flex-row-reverse" : "flex-row"}`}
-              >
-                {!message.isMine && (
-                  <Avatar className="w-10 h-10 shrink-0">
-                    <AvatarImage src={message.avatar} />
-                    <AvatarFallback>{message.sender.slice(0, 2)}</AvatarFallback>
-                  </Avatar>
-                )}
-
-                <div className={`flex flex-col ${message.isMine ? "items-end" : "items-start"} max-w-md`}>
+            {filteredMessages.length === 0 ? (
+              <div className="text-center text-muted-foreground mt-10">No messages found.</div>
+            ) : (
+              filteredMessages.map((message) => (
+                <div
+                  key={message.id}
+                  className={`flex gap-3 ${message.isMine ? "flex-row-reverse" : "flex-row"}`}
+                >
                   {!message.isMine && (
-                    <span className="text-sm font-medium mb-1 px-1">
-                      {message.sender}
-                    </span>
+                    <Avatar className="w-10 h-10 shrink-0">
+                      <AvatarImage src={message.avatar} />
+                      <AvatarFallback>{message.sender.slice(0, 2)}</AvatarFallback>
+                    </Avatar>
                   )}
 
-                  {message.type === "image" ? (
-                    <div className="rounded-2xl overflow-hidden bg-muted">
-                      <div className="w-64 h-48 bg-muted"></div>
-                    </div>
-                  ) : (
-                    <div
-                      className={`rounded-2xl px-4 py-3 ${
-                        message.isMine
-                          ? "bg-[hsl(var(--chat-bubble-mine))] text-[hsl(var(--chat-bubble-mine-foreground))]"
-                          : "bg-muted text-foreground"
-                      }`}
-                    >
-                      <p className="text-sm">{message.text}</p>
-                    </div>
-                  )}
+                  <div className={`flex flex-col ${message.isMine ? "items-end" : "items-start"} max-w-md`}>
+                    {!message.isMine && (
+                      <span className="text-sm font-medium mb-1 px-1">
+                        {message.sender}
+                      </span>
+                    )}
 
-                  <div className="flex items-center gap-2 mt-1 px-1">
-                    {message.reactions && message.reactions.length > 0 && (
-                      <div className="flex items-center gap-1 text-xs bg-muted rounded-full px-2 py-0.5">
-                        {message.reactions.map((reaction, idx) => (
-                          <span key={idx}>
-                            {reaction.emoji} {reaction.count}
-                          </span>
-                        ))}
+                    {message.type === "image" ? (
+                      <div className="rounded-2xl overflow-hidden bg-muted">
+                        <div className="w-64 h-48 bg-muted"></div>
+                      </div>
+                    ) : (
+                      <div
+                        className={`rounded-2xl px-4 py-3 ${
+                          message.isMine
+                            ? "bg-[hsl(var(--chat-bubble-mine))] text-[hsl(var(--chat-bubble-mine-foreground))]"
+                            : "bg-muted text-foreground"
+                        }`}
+                      >
+                        <p className="text-sm">{message.text}</p>
                       </div>
                     )}
-                    <span className="text-xs text-muted-foreground">{message.time}</span>
+
+                    <div className="flex items-center gap-2 mt-1 px-1">
+                      {message.reactions && message.reactions.length > 0 && (
+                        <div className="flex items-center gap-1 text-xs bg-muted rounded-full px-2 py-0.5">
+                          {message.reactions.map((reaction, idx) => (
+                            <span key={idx}>
+                              {reaction.emoji} {reaction.count}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                      <span className="text-xs text-muted-foreground">{message.time}</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </ScrollArea>
 
@@ -155,17 +182,11 @@ export default function ChatRoom() {
       {/* Input Form */}
       <footer className="bg-background border-t px-6 py-4">
         <form className="flex gap-3 w-full">
-          <Button variant="ghost" size="icon" type="button">
-            <Paperclip className="w-5 h-5" />
-          </Button>
           <Input
             type="text"
             placeholder="Your message"
             className="flex-grow"
           />
-          <Button variant="ghost" size="icon" type="button">
-            <Mic className="w-5 h-5" />
-          </Button>
           <Button
             type="submit"
             size="icon"

@@ -7,9 +7,31 @@ const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // TODO: handle login logic
+    try {
+    const response = await fetch('/api/v1/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    });
+    if (!response.ok) {
+      throw new Error('Login failed');
+    }
+    const data = await response.json();
+    if (data.success) {
+      localStorage.setItem('accessToken', data.data.accessToken);
+      localStorage.setItem('refreshToken', data.data.refreshToken);
+      localStorage.setItem('user', JSON.stringify(data.data.user));
+      alert(data.message || 'Login berhasil!');
+      window.location.href = '/';
+    } else {
+      console.error('Login failed:', data);
+      alert(data.message || 'Login gagal!');
+    }
+  } catch (error) {
+    alert('Error during login: ' + error.message);
+  }
   }
 
   return (
@@ -53,6 +75,9 @@ const Login = () => {
                 placeholder="Enter your password"
                 className="text-base py-2"
               />
+              <div className="mt-1 text-right">
+                <a href="/forgot-password" className="text-xs text-primary font-semibold hover:underline">Forgot password?</a>
+              </div>
             </div>
             <Button type="submit" variant="hero" className="w-full mt-6 text-base py-2">
               Login
