@@ -22,15 +22,25 @@ import ResetPassword from "./pages/ResetPassword";
 
 const queryClient = new QueryClient();
 
-const user = {
-  name: "Valorant User",
-  email: "user@email.com",
-  avatar: undefined,
-  bio: "Let's win together!",
-};
+function getUserFromLocalStorage() {
+  try {
+    const userStr = localStorage.getItem("user");
+    console.log("Retrieved user from localStorage:", userStr);
+    if (userStr) return JSON.parse(userStr);
+  } catch {
+    console.error("Failed to parse user from localStorage");
+  }
+}
 
 function App() {
   const [profileOpen, setProfileOpen] = React.useState(false);
+  const [user, setUser] = React.useState(getUserFromLocalStorage());
+  console.log("User data in App component:", user);
+
+  React.useEffect(() => {
+    setUser(getUserFromLocalStorage());
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>

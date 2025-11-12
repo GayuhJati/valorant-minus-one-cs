@@ -2,6 +2,7 @@ import Layout from "@/components/Layout";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/use-toast";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
@@ -12,12 +13,17 @@ const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const username = gameName;
+  const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       if (password !== confirmPassword) {
-        alert("Passwords do not match!");
+        toast({
+          title: "Passwords do not match!",
+          description: "Please make sure both passwords are the same.",
+          variant: "destructive",
+        });
         return;
       }
       const response = await fetch("/api/v1/auth/register", {
@@ -30,14 +36,32 @@ const Signup = () => {
       }
       const data = await response.json();
       if (data.success) {
-        alert(data.message || "Signup successful! Please log in.");
-        window.location.href = "/login";
+        toast({
+          title: "Signup successful!",
+          description: data.message || "Please check your email to verify your account.",
+          className: "bg-green-600 text-white border-green-700 shadow-2xl text-base font-semibold",
+          duration: 3000,
+        });
+        setTimeout(() => {
+          window.location.href = "/login";
+        }, 1500);
       } else {
         console.error("Signup failed:", data);
-        alert(data.message || "Signup failed!");
+        toast({
+          title: "❌ Signup failed!",
+          description: data.message || "Please try again.",
+          className: "bg-red-600 text-white border-red-700 shadow-2xl text-base font-semibold",
+          duration: 3000,
+        });
       }
     } catch (error) {
-      alert("Error during signup: " + error.message);
+      const err = error as Error;
+      toast({
+        title: "Error during signup",
+        description: err.message,
+        className: "bg-red-600 text-white border-red-700 shadow-2xl text-base font-semibold",
+        duration: 3000,
+      });
     }
   };
 

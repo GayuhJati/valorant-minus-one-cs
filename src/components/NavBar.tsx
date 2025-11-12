@@ -7,6 +7,7 @@ type User = {
   id: number;
   email: string;
   username: string;
+  riotId: string;
   role: string;
   provider: string;
   emailVerified: boolean;
@@ -18,6 +19,7 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [user, setUser] = useState<User | null>(null);
+  const [showDropdown, setShowDropdown] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -74,7 +76,27 @@ const Navbar = () => {
               </a>
             ))}
             {user ? (
-              <span className="text-foreground font-semibold text-sm">{user.username}</span>
+              <div className="relative">
+                <button
+                  className="text-foreground font-semibold text-sm px-2 py-1 rounded hover:bg-accent transition focus:outline-none uppercase"
+                  onClick={() => setShowDropdown((prev) => !prev)}
+                >
+                  {user.riotId.toUpperCase()}
+                </button>
+                {showDropdown && (
+                  <div className="absolute right-0 mt-2 w-32 bg-background border border-border rounded shadow-lg z-50 animate-fade-in">
+                    <button
+                      className="block w-full text-left px-4 py-2 text-red-600 hover:bg-slate-950 rounded"
+                      onClick={() => {
+                        localStorage.removeItem("user");
+                        window.location.href = "/login";
+                      }}
+                    >
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
             ) : (
               <a href="/login">
                 <Button variant="hero" size="sm">
@@ -112,7 +134,27 @@ const Navbar = () => {
               </a>
             ))}
             {user ? (
-              <span className="block text-foreground font-semibold text-sm w-full text-center">{user.username}</span>
+              <div className="relative w-full flex justify-center">
+                <button
+                  className="block text-foreground font-semibold text-sm w-full text-center px-2 py-1 rounded hover:bg-accent transition focus:outline-none uppercase"
+                  onClick={() => setShowDropdown((prev) => !prev)}
+                >
+                  {user.riotId.toUpperCase()}
+                </button>
+                {showDropdown && (
+                  <div className="absolute right-0 left-0 mx-auto mt-2 w-32 bg-background border border-border rounded shadow-lg z-50 animate-fade-in">
+                    <button
+                      className="block w-full text-left px-4 py-2 text-red-600 hover:bg-slate-950 rounded"
+                      onClick={() => {
+                        localStorage.removeItem("user");
+                        window.location.href = "/login";
+                      }}
+                    >
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
             ) : (
               <a href="/login">
                 <Button variant="hero" size="sm" className="w-full">

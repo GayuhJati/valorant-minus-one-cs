@@ -7,10 +7,10 @@ interface ProfileModalProps {
   open: boolean;
   onClose: () => void;
   user?: {
-    name: string;
+    username: string;
     email: string;
-    avatar?: string;
-    bio?: string;
+    riotId?: string;
+    gameName?: string;
   };
 }
 
@@ -23,6 +23,7 @@ const SectionTitle = ({ title, description }: { title: string; description: stri
 
 const ProfileModal: React.FC<ProfileModalProps> = ({ open, onClose, user }) => {
   const [activeTab, setActiveTab] = useState("profile");
+  console.log("User data in ProfileModal:", user);
 
   if (!open) return null;
 
@@ -48,17 +49,13 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ open, onClose, user }) => {
             <SectionTitle title="Profile Overview" description="A summary of your public profile." />
             <div className="flex flex-col items-center text-center">
               <Avatar className="w-28 h-28 mb-4">
-                {user?.avatar ? (
-                  <AvatarImage src={user.avatar} />
-                ) : (
-                  <AvatarFallback className="bg-primary text-primary-foreground text-4xl">
-                    {user?.name?.[0] || "U"}
+                  <AvatarFallback className="bg-primary text-primary-foreground text-5xl">
+                    {user?.gameName?.[0].toUpperCase() || "U"}
                   </AvatarFallback>
-                )}
               </Avatar>
-              <h1 className="text-3xl font-bold text-primary mb-1">{user?.name || "User Name"}</h1>
+              <h1 className="text-3xl font-bold text-primary mb-1">{user?.gameName || "User Name"}</h1>
               <p className="text-muted-foreground mb-4">{user?.email || "user@email.com"}</p>
-              <p className="text-foreground max-w-md">{user?.bio || "No bio has been set yet. You can add one in the 'Edit Profile' section."}</p>
+              <p className="text-foreground max-w-md">{user?.riotId || "No Riot ID has been set yet. You can add one in the 'Edit Profile' section."}</p>
             </div>
           </div>
         );
@@ -69,19 +66,15 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ open, onClose, user }) => {
             <form className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-muted-foreground mb-1">Full Name</label>
-                <Input defaultValue={user?.name} placeholder="Enter your full name" />
+                <Input defaultValue={user?.gameName} placeholder="Enter your full name" />
               </div>
               <div>
                 <label className="block text-sm font-medium text-muted-foreground mb-1">Email Address</label>
                 <Input type="email" defaultValue={user?.email} placeholder="Enter your email" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-muted-foreground mb-1">Your Bio</label>
-                <textarea
-                  className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                  defaultValue={user?.bio}
-                  placeholder="Tell us a little about yourself"
-                ></textarea>
+                <label className="block text-sm font-medium text-muted-foreground mb-1">Your Riot ID</label>
+                <Input defaultValue={user?.riotId} placeholder="Enter your Riot ID" />
               </div>
               <div className="flex justify-end gap-3 pt-4">
                 <Button variant="outline" type="button">Cancel</Button>

@@ -1,3 +1,13 @@
+// Tipe data tim
+type Team = {
+	id: string | number;
+	name?: string;
+	desc?: string;
+	rules?: string;
+	members?: number;
+	rank?: string;
+	rolesNeeded?: string[];
+};
 import Layout from '@/components/Layout'
 import React, { useState } from 'react'
 import { Button } from '@/components/ui/button'
@@ -47,9 +57,10 @@ const valorantRoles = [
 ];
 
 const Board = () => {
-	const [page, setPage] = useState(1)
-	const [filteredTeams, setFilteredTeams] = useState(teams)
-	const [pendingFilter, setPendingFilter] = useState({ search: '', rank: '', role: '', hero: '' })
+	const [page, setPage] = useState(1);
+	const [teamsData, setTeamsData] = useState<Team[]>([]); // hanya data dari API
+	const [filteredTeams, setFilteredTeams] = useState<Team[]>([]);
+	const [pendingFilter, setPendingFilter] = useState({ search: '', rank: '', role: '', hero: '' });
 	const [showProfileForm, setShowProfileForm] = useState(false);
 	const [selectedRole, setSelectedRole] = useState<string[]>([]);
 	const [selectedRank, setSelectedRank] = useState('');
@@ -57,32 +68,66 @@ const Board = () => {
 	const [formError, setFormError] = useState('');
 	const [profileFilter, setProfileFilter] = useState<{ role?: string[]; rank?: string }>({});
 
+	// Fetch data dari API saat mount
+	React.useEffect(() => {
+		const fetchTeams = async () => {
+			try {
+				const token = localStorage.getItem('accessToken');
+				console.log('Using token:', token);
+				const res = await fetch('/api/v1/groups', {
+					method: 'GET',
+					headers: {
+						'Content-Type': 'application/json',
+						'Authorization': `Bearer ${token}`
+					},
+				});
+				if (!res.ok) throw new Error('Gagal fetch');
+				const data = await res.json();
+					// Pastikan data array 1 dimensi, flatten jika perlu
+					let arr = Array.isArray(data)
+						? data.flat()
+						: (Array.isArray(data.groups) ? data.groups.flat() : []);
+					if (arr.length === 0 && typeof data === 'object') {
+						// fallback: jika data object, ambil values
+						arr = Object.values(data).filter(v => typeof v === 'object').flat();
+					}
+					console.log('Raw fetched data:', data);
+					setTeamsData(arr.length ? arr : teams);
+					setFilteredTeams(arr.length ? arr : teams);
+					console.log('Fetched teams:', arr);
+			} catch (err) {
+				setTeamsData(teams); // fallback ke dummy
+				setFilteredTeams(teams);
+			}
+		};
+		fetchTeams();
+	}, []);
+
 	// Gabungkan filter profile dan filter manual
 	const applyAllFilters = (manual = pendingFilter, profile = profileFilter) => {
-		let result = teams;
-		if (profile.role && profile.role.length > 0) {
-			result = result.filter(team =>
-				team.rolesNeeded && profile.role!.some(r => team.rolesNeeded.includes(r))
-			);
-		}
-		if (profile.rank) {
-			result = result.filter(team =>
-				team.rank.toLowerCase().includes(profile.rank!.toLowerCase())
-			);
-			console.log('cek', result);
-		}
-		if (manual.search) {
-			result = result.filter(team => team.name.toLowerCase().includes(manual.search.toLowerCase()));
-		}
-		if (manual.rank) {
-			result = result.filter(team => team.rank.toLowerCase().includes(manual.rank.toLowerCase()));
-		}
-		if (manual.role) {
-			result = result.filter(team => team.desc.toLowerCase().includes(manual.role.toLowerCase()));
-		}
-		if (manual.hero) {
-			result = result.filter(team => team.desc.toLowerCase().includes(manual.hero.toLowerCase()));
-		}
+		let result = teamsData;
+			if (profile.role && profile.role.length > 0) {
+				result = result.filter(team =>
+					Array.isArray(team.rolesNeeded) && profile.role!.some(r => team.rolesNeeded?.includes(r))
+				);
+			}
+			if (profile.rank) {
+				result = result.filter(team =>
+					team.rank?.toLowerCase().includes(profile.rank!.toLowerCase())
+				);
+			}
+			if (manual.search) {
+				result = result.filter(team => team.name?.toLowerCase().includes(manual.search.toLowerCase()));
+			}
+			if (manual.rank) {
+				result = result.filter(team => team.rank?.toLowerCase().includes(manual.rank.toLowerCase()));
+			}
+			if (manual.role) {
+				result = result.filter(team => team.desc?.toLowerCase().includes(manual.role.toLowerCase()));
+			}
+			if (manual.hero) {
+				result = result.filter(team => team.desc?.toLowerCase().includes(manual.hero.toLowerCase()));
+			}
 		setFilteredTeams(result);
 		setPage(1);
 	};
@@ -103,7 +148,7 @@ const Board = () => {
 	React.useEffect(() => {
 		applyAllFilters();
 		// eslint-disable-next-line
-	}, [profileFilter, pendingFilter]);
+	}, [profileFilter, pendingFilter, teamsData]);
 
 	React.useEffect(() => {
 		if (showProfileForm) {
@@ -129,13 +174,13 @@ const Board = () => {
 		applyAllFilters();
 	};
 
-	const handleJoin = () =>{
-		
-	}
-
-	const totalPages = Math.ceil(filteredTeams.length / PAGE_SIZE)
-	const pagedTeams = filteredTeams.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
-
+	const handleJoin = () => {
+		// ...
+	};
+	
+	const totalPages = Math.ceil(filteredTeams.length / PAGE_SIZE) || 1;
+	const pagedTeams = filteredTeams.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+	console.log('Filtered teams:', pagedTeams);
 	return (
 		<Layout>
 			{showProfileForm && (
@@ -266,7 +311,7 @@ const Board = () => {
 								className="text-xs px-3 py-1"
 								onClick={() => {
 									setPendingFilter({ search: '', rank: '', role: '', hero: '' });
-									setFilteredTeams(teams);
+									setFilteredTeams(teamsData);
 									setPage(1);
 								}}
 							>
@@ -286,9 +331,9 @@ const Board = () => {
 									<span className="text-lg text-muted-foreground font-semibold">Room is not found or maybe has been deleted</span>
 								</div>
 							) : (
-								pagedTeams.map((team) => (
+								pagedTeams.map((team, index) => (
 									<div
-										key={team.id}
+										key={index}
 										className="bg-background/80 border border-border rounded-xl shadow-lg p-6 flex flex-col justify-between"
 									>
 										<div>
@@ -301,7 +346,7 @@ const Board = () => {
 														className="w-10 h-10 object-contain drop-shadow mb-1"
 													/>
 													<span className="text-xs font-semibold text-white capitalize text-center">
-														{team.rank.replace(/\d+$/, '').replace(/([a-z])([A-Z])/, '$1 $2')}
+														{/* {team.rank.replace(/\d+$/, '').replace(/([a-z])([A-Z])/, '$1 $2')} */}
 													</span>
 												</div>
 											</div>

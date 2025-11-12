@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
+import { set } from "date-fns";
 
 const Validation = () => {
   const [status, setStatus] = useState<"loading" | "success" | "error">("loading");
@@ -20,9 +21,15 @@ const Validation = () => {
         if (data.success) {
           setStatus("success");
           setMessage(data.message || "Email successfully verified!");
+          setTimeout(() => {
+            window.location.href = "/login";
+          }, 2000);
         } else {
           setStatus("error");
           setMessage(data.message || "Verification failed.");
+          setTimeout(() => {
+            window.location.href = "/login";
+          }, 2000);
         }
       })
       .catch(() => {
@@ -53,8 +60,8 @@ const Validation = () => {
                 <circle cx="24" cy="24" r="22" fill="#22c55e" fillOpacity="0.18" />
                 <path d="M16 25l6 6 10-14" stroke="#16a34a" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
-              <h2 className="text-3xl font-bold text-green-700 mb-2 text-center">Email Verified!</h2>
-              <p className="text-lg text-center text-green-700 mb-4">Your email has been successfully verified. You can now login.</p>
+              <h2 className="text-3xl font-bold text-white mb-2 text-center">Email Verified!</h2>
+              <p className="text-lg text-center text-white mb-4">Your email has been successfully verified. You can now login.</p>
               <a href="/login">
                 <Button variant="hero" className="w-full">Login</Button>
               </a>
@@ -66,8 +73,8 @@ const Validation = () => {
                 <circle cx="24" cy="24" r="22" fill="#ef4444" fillOpacity="0.18" />
                 <path d="M18 18l12 12M30 18l-12 12" stroke="#ef4444" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
-              <h2 className="text-3xl font-bold text-red-700 mb-2 text-center">Verification Failed</h2>
-              <p className="text-lg text-center text-red-600 mb-4">The verification link is invalid or has expired.</p>
+              <h2 className="text-3xl font-bold text-white mb-2 text-center">Verification Failed</h2>
+              <p className="text-lg text-center text-white mb-4">The verification link is invalid or has expired.</p>
             </div>
           )}
         </div>
